@@ -3,14 +3,11 @@ package com.alie.rxjavawork
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
-import io.reactivex.Observer
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.internal.operators.observable.ObservableSubscribeOn
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.Callable
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -25,19 +22,30 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun doOperate() {
-//        rxjava01()
-//        rxjava02()
-//        rxjava03()
-//        rxjava04()
-//        rxjava05()
-//        rxjava06()
-          rxjava07()
+//        rxJava01()
+//        rxJava02()
+//        rxJava03()
+//        rxJava04()
+//        rxJava05()
+//        rxJava06()
+//        rxJava07()
+//        rxJava08()
+//        rxJava09()
+//        rxJava10()
+//        rxJava11()
+//        rxJava12()
+//        rxJava13()
+        rxJava14()
     }
+
+    /**
+     * ============基本练习开始================
+     */
 
     /**
      * 01初步使用，发射一下事件
      */
-    private fun rxjava01() {
+    private fun rxJava01() {
         Observable.create(object : ObservableOnSubscribe<String> {
             override fun subscribe(emitter: ObservableEmitter<String>) {
                 emitter.onNext("你好")
@@ -61,43 +69,43 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 02输出所有学生的姓名
      * map使用
+     * 02输出所有学生的姓名
      */
-    fun rxjava02() {
+    fun rxJava02() {
 
         // 写法1：
         Observable.fromIterable(Util.getAllStudents())
             .map { student -> student.name }
-            .subscribe { name -> Log.i(TAG, "===rxjava02=name:$name") }
+            .subscribe { name -> Log.i(TAG, "===rxJava02=name:$name") }
 
 
         // 写法2：(他娘的，map变换在kotlin版本中这么简单，直接就it.name ~~~)
         val subscribe =
             Observable.fromIterable(Util.getAllStudents())
                 .map { it.name }
-                .subscribe { Log.i(TAG, "===rxjava02=name:$it") }
+                .subscribe { Log.i(TAG, "===rxJava02=name:$it") }
     }
 
     /**
+     * map map
      * 输出所有学生的鞋的名称
      * 03(实在想不到例子了）
-     * map map
      */
-    fun rxjava03() {
+    fun rxJava03() {
         Observable.fromIterable(Util.getAllStudents())
             .map { it.cloth }
             .map { it.shoes }
             .subscribe {
-                Log.i(TAG, "====rxjava03,shoes:$it")
+                Log.i(TAG, "====rxJava03,shoes:$it")
             }
     }
 
     /**
-     * 输出所有性别是女的学生的鞋~（只能想到这种业务了）
      * map map filter
+     * 输出所有性别是女的学生的鞋~（只能想到这种业务了）
      */
-    fun rxjava04() {
+    fun rxJava04() {
         Observable.fromIterable(Util.getAllStudents())
             .filter { it.gender.equals("女") }
             .map { it.cloth }
@@ -106,46 +114,187 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * 打印所有学生所修的课程名称
      * flatMap(flatMapIterable) + map
+     * 打印所有学生所修的课程名称
      */
-    fun rxjava05() {
+    fun rxJava05() {
         // 写法1：在flatMap中返回Observable.fromIterable(it.courses)
 
         Observable.fromIterable(Util.getAllStudents())
             .flatMap { Observable.fromIterable(it.courses) }
             .map { it.name }
-            .subscribe { Log.i(TAG, "rxjava05:allcourse:$it") }
+            .subscribe { Log.i(TAG, "rxJava05:allcourse:$it") }
         // 写法2：直接使用哪个
         Observable.fromIterable(Util.getAllStudents())
             .flatMapIterable { it.courses }
             .map { it.name }
-            .subscribe { Log.i(TAG, "rxjava05:allcourse:$it") }
+            .subscribe { Log.i(TAG, "rxJava05:allcourse:$it") }
     }
 
     /**
-     * 打印所有学生所修的课程里的老师的名字
      * flatMap map,map
+     * 打印所有学生所修的课程里的老师的名字
      */
-    fun rxjava06() {
+    fun rxJava06() {
         Observable.fromIterable(Util.getAllStudents())
             .flatMapIterable { it.courses }
             .map { it.teacher }
             .map { it.name }
-            .subscribe { Log.i(TAG,"====rxjava06:$it") }
+            .subscribe { Log.i(TAG, "====rxJava06:$it") }
 
     }
 
     /**
-     * 打印所有 课程难度 > 1的所有课程 老师的年龄
      * flatMap map filter
+     * 打印所有 课程难度 > 1的所有课程 老师的年龄
      */
-    fun rxjava07() {
+    fun rxJava07() {
         Observable.fromIterable(Util.getAllStudents())
             .flatMapIterable { it.courses }
             .filter { it.difficulty > 1 }
             .map { it.teacher }
             .map { it.age }
-            .subscribe { Log.i(TAG,"rxjava07=老师年龄：$it") }
+            .subscribe { Log.i(TAG, "rxJava07=老师年龄：$it") }
     }
+
+    /**
+     * Flowable
+     * 打印所有学生姓名
+     */
+    fun rxJava08() {
+        Flowable.fromIterable(Util.getAllStudents())
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.i(TAG, "rxJava08=名称：${it.name}")
+            }
+    }
+
+    /**
+     * single
+     */
+    fun rxJava09() {
+        Single.just(5 * 6).subscribe(object : SingleObserver<Int> {
+            override fun onError(e: Throwable) {
+            }
+
+            override fun onSubscribe(d: Disposable) {
+            }
+
+            override fun onSuccess(t: Int) {
+                Log.i(TAG, "====rxJava09:$t")
+            }
+
+        })
+    }
+
+    /**
+     * ============基本练习结束================
+     */
+
+    /**
+     * ==============创建型操作符 开始======================
+     */
+
+    /**
+     * create
+     * 创建一个被观察者
+     */
+    fun rxJava10() {
+        Observable
+            .create<String> { it.onNext("你好，这里是 创建型操作符") }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.i(TAG, "===rxJava10 $it")
+            }
+    }
+
+    /**
+     * just
+     * 创建一个被观察者，一次发送10个以内的事件
+     */
+    fun rxJava11() {
+        Observable.just(2 * 2, 3 * 3, 4 * 4, 5 * 5)
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.i(TAG, "======rxJava11 $it")
+            }
+    }
+
+    /**
+     * fromArray
+     * 创建一个被观察者，发送数组
+     */
+    fun rxJava12() {
+
+        /**
+         * todo 这里的fromArray传参是可变数组，它是按照元素计算，因此，传入arr也会在消费的时候直接返回出来
+         * todo 而不是遍历
+         */
+
+        val arr = intArrayOf(2, 5)
+        Observable.fromArray(1, 2, 3)
+            .observeOn(Schedulers.io())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+
+            }
+
+    }
+
+    /**
+     * fromCallable
+     * 在fromCallable{} 大括号中，直接写call中的代码即可，
+     * 这里是lamuda表达式，因此，最后一行就lamuda的返回值
+     */
+    fun rxJava13() {
+//        Observable.fromCallable(object : Callable<String> {
+//            override fun call(): String {
+//                return "callable"
+//            }
+//
+//        })
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe {
+//            Log.i(TAG,"=====rxJava13:$it")
+//        }
+
+        /**
+         * 在fromCallable{} 大括号中，直接写call中的代码即可，
+         * 这里是lamuda表达式，因此，最后一行就lamuda的返回值
+         */
+        Observable.fromCallable {
+            Log.i(TAG, "Callable的call方法调用啦xxxxx~~~当前线程： ${Thread.currentThread().name}")
+            "yeah baby"
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Log.i(TAG, "=====rxJava13:$it")
+            }
+
+    }
+
+    /**
+     * fromIterable
+     * distinct 用于搜搜结果去重复
+     * 遍历一个集合
+     * 打印所有 课程难度 > 1的所有课程 老师的年龄
+     */
+    fun rxJava14() {
+        Observable.fromIterable(Util.getAllStudents())
+            .flatMapIterable { it.courses }
+            .filter { it.difficulty > 1 }
+            .map { it.teacher }
+            .distinct { it.age }
+            .subscribe {
+                Log.i(TAG, "====rxJava14：teacherAge:${it?.age}")
+            }
+    }
+    /**
+     * ==============创建型操作符 结束======================
+     */
 }

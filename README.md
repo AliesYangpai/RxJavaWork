@@ -6,6 +6,9 @@ this is some simple of rxJava
 
 ## 创建操作符：
               create()  
+              just()          
+              fromArray()
+              fromCallable()                              
               fromIterable()  
 ## 转换操作符：
               map()
@@ -15,4 +18,5 @@ this is some simple of rxJava
 ## 过滤操作符：
               filter()  
 ## 条件操作符：  
-## 组合操作符：  
+## 组合操作符：
+
