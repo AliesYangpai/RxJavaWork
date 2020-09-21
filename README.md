@@ -9,7 +9,10 @@ this is some simple of rxJava
               just()          
               fromArray()
               fromCallable()                              
-              fromIterable()  
+              fromIterable()
+              timer()          
+              interval()   
+              range()            
 ## 转换操作符：
               map()
               flatMap()

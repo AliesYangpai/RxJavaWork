@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Callable
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -35,7 +36,10 @@ class MainActivity : AppCompatActivity() {
 //        rxJava11()
 //        rxJava12()
 //        rxJava13()
-        rxJava14()
+//        rxJava14()
+//        rxJava15()
+//        rxJava16()
+        rxJava17()
     }
 
     /**
@@ -294,7 +298,43 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "====rxJava14：teacherAge:${it?.age}")
             }
     }
+
+    /**
+     * timer
+     * 延迟1 min进行打印 这里仅仅执行一次
+     */
+    fun rxJava15() {
+        Observable.timer(1, TimeUnit.MINUTES).subscribe {
+            Log.i(TAG, "======rxJava15 $it")
+        }
+    }
+
+    /**
+     * interval
+     * 延迟500 ms 并且每隔1000 ms 打印一次数据
+     * （这里会永远打印下去，如果要停止，需使用过滤操作符 take,后面介绍）
+     */
+    fun rxJava16() {
+        Observable
+            .interval(500, 1000, TimeUnit.MILLISECONDS)
+            .subscribe { Log.i(TAG, "=======rxJava16 你好，我的朋友") }
+
+    }
+
+    /**
+     * range
+     * 0:代表第一个数
+     * 6：代表数量，（这里就是 从0开始算产生连续的6个数）
+     * 数组可以这么应用一波
+     */
+    fun rxJava17() {
+        Flowable.range(0, 6)
+            .subscribe { Log.i(TAG, "=====rxJava17 $it") }
+    }
+
+
     /**
      * ==============创建型操作符 结束======================
      */
+
 }
