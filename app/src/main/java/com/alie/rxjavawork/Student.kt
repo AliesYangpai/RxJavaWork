@@ -1,8 +1,16 @@
 package com.alie.rxjavawork
 
-data class Student(var name: String?, var age: Int, var gender: String?, var cloth: Cloth?,var courses:ArrayList<Course>?) {
+data class Student(var name: String?,
+                   var age: Int,
+                   var gender: String?,
+                   var cloth: Cloth?,
+                   var courses:ArrayList<Course>?) {
 
-    constructor():this(null,0,null,null,null)
+    constructor():this(null,
+        0,
+        null,
+        null,
+        null)
 
     inner class Cloth(var jacket: String?, var pants: String?, var shoes: String?) {
         constructor() : this(null, null, null)

@@ -39,7 +39,11 @@ class MainActivity : AppCompatActivity() {
 //        rxJava14()
 //        rxJava15()
 //        rxJava16()
-        rxJava17()
+//        rxJava17()
+//        rxJava18()
+//        rxJava19()
+//        rxJava20()
+        rxJava21()
     }
 
     /**
@@ -336,5 +340,73 @@ class MainActivity : AppCompatActivity() {
     /**
      * ==============创建型操作符 结束======================
      */
+///////////////////////////////////////////////////////////////////////
 
+    /**
+     * ==============转换操作符 开始======================
+     */
+
+    /**
+     * map
+     * 打印所有学生衣服的名称
+     */
+    fun rxJava18() {
+        Observable.fromIterable(Util.getAllStudents())
+            .map { it.cloth }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                println("=====rxJava18 ${it?.jacket}")
+            }
+    }
+
+    /**
+     * flatMap
+     * 打印所有老师的年龄，去重
+     */
+    fun rxJava19() {
+        Observable.fromIterable(Util.getAllStudents())
+            .flatMapIterable { it.courses }
+            .map { it.teacher }
+            .distinct { it.age }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                println("=====rxJava19 ${it?.age}")
+            }
+    }
+
+    /**
+     * concatMap
+     * 打印所有老师的姓名 有序转化
+     */
+    fun rxJava20() {
+        Observable.fromIterable(Util.getAllStudents())
+            .concatMapIterable { it.courses }
+            .map { it.teacher }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                println("=====rxJava20 ${it?.name}")
+            }
+    }
+
+    /**
+     * buffer
+     * 这个实际上就是打包发送
+     */
+    fun rxJava21() {
+        Observable.range(1,50)
+            .buffer(5)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                println("=====rxJava21 ${it }")
+            }
+    }
+
+
+    /**
+     * ==============转换操作符 结束======================
+     */
 }

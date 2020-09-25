@@ -17,6 +17,9 @@ this is some simple of rxJava
               map()
               flatMap()
               flatMapIterable()
+              concatMap()
+              concatMapIterable()          
+              buffer()                    
 ## 功能操作符：  
 ## 过滤操作符：
               filter()  
