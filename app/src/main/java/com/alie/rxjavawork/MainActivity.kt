@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity() {
 //        rxJava18()
 //        rxJava19()
 //        rxJava20()
-        rxJava21()
+//        rxJava21()
+        rxJava22()
     }
 
     /**
@@ -394,19 +395,50 @@ class MainActivity : AppCompatActivity() {
     /**
      * buffer
      * 这个实际上就是打包发送
+     * 将0-49这50个元素 每10个一发
      */
     fun rxJava21() {
-        Observable.range(1,50)
-            .buffer(5)
+        Observable.range(0, 49)
+            .buffer(10)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                println("=====rxJava21 ${it }")
+                println("=====rxJava21 ${it}")
             }
     }
 
+    /**
+     * groupBy
+     * 按照一定逻辑进行分组，最终结果类似Map<key,Observable>
+     */
+    fun rxJava22() {
+//        Observable.fromIterable(Util.getAllStudents())
+//            .flatMapIterable { it.courses }
+//            .map { it.teacher }
+//            .groupBy { it.gender }
+//            .subscribe { groupedObservable ->
+//                println("===rxJava22() key ${groupedObservable.key}")
+//                groupedObservable.subscribe { teacher ->
+//                    println("===rxJava22() teacherName :${teacher?.name}")
+//                }
+//            }
+
+        Observable.range(12, 25).groupBy {
+            when {
+                it < 18 -> "少年组"
+                else -> "成年组"
+            }
+        }.subscribe {
+            println("=rxJava22==key===${it.key}")
+            it.subscribe { count ->
+                println("=rxJava22==count===$count")
+            }
+        }
+    }
 
     /**
      * ==============转换操作符 结束======================
      */
+
+    ///////////////////////////////////////////////////////////////////////
 }

@@ -19,7 +19,8 @@ this is some simple of rxJava
               flatMapIterable()
               concatMap()
               concatMapIterable()          
-              buffer()                    
+              buffer()  
+              groupBy()                            
 ## 功能操作符：  
 ## 过滤操作符：
               filter()  
