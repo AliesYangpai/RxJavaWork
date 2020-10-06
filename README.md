@@ -20,10 +20,16 @@ this is some simple of rxJava
               concatMap()
               concatMapIterable()          
               buffer()  
-              groupBy()                            
-## 功能操作符：  
+              groupBy()  
+              scan()                                              
+## 功能操作符：
 ## 过滤操作符：
               filter()  
 ## 条件操作符：  
 ## 组合操作符：
+              concat()
+              concatArray()
+              merge()
+              mergeArray()                              
+
 

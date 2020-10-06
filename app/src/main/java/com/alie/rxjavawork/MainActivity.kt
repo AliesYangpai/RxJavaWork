@@ -44,7 +44,11 @@ class MainActivity : AppCompatActivity() {
 //        rxJava19()
 //        rxJava20()
 //        rxJava21()
-        rxJava22()
+//        rxJava22()
+//        rxJava23()
+//        rxJava25()
+//        rxJava26()
+        rxJava27()
     }
 
     /**
@@ -437,8 +441,89 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * scan
+     * 将数据以一定的逻辑聚合起来
+     * 这里我们实现一个数据累加的逻辑
+     */
+    fun rxJava23() {
+        Observable.range(1, 10)
+            .scan { t1, t2 ->
+                println("===rxJava23 in scan t1:$t1 t2:$t2")
+                t1 + t2
+            }
+            .subscribe {
+                println("====rxJava23() in subscrib:$it")
+            }
+    }
+
+    /**
+     * window
+     * 这个类似于buffer,不同于buffer的是，这个方法将结果封装成Observerl发射出来 （buffer是封装成list）
+     * //todo 待补充
+     */
+    fun rxJava24() {
+    }
+    /**
      * ==============转换操作符 结束======================
      */
 
+    ///////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * ==============组合操作符 开始======================
+     */
+
+    /**
+     * concat
+     * 将多个观察者（Observer）组合在一起 【按顺序】 一并发射出来
+     * concat(observer1,observer2,observer3,observer4) 此法最多4个观察者参数
+     */
+    fun rxJava25() {
+        Observable.concat(
+            Observable.fromIterable(Util.getAllCurseA()),
+            Observable.fromIterable(Util.getAllCurseB()),
+            Observable.fromIterable(Util.getAllCurseC()),
+            Observable.fromIterable(Util.getAllCurseD())
+        ).subscribe {
+            println("===rxjava25 课程名称：${it.name}")
+        }
+    }
+
+    /**
+     * concatArray
+     * 将多个观察者（Observer）组合在一起 【按顺序】 一并发射出来
+     * 【个人理解】concat和concatArray选型的时候，可以直接选择的concatArray(concat也是调用concatArray)
+     */
+    fun rxJava26() {
+        Observable.concatArray(
+            Observable.fromIterable(Util.getAllCurseA()),
+            Observable.fromIterable(Util.getAllCurseB()),
+            Observable.fromIterable(Util.getAllCurseC()),
+            Observable.fromIterable(Util.getAllCurseD()),
+            Observable.fromIterable(Util.getAllCurseB()),
+        ).subscribe {
+            println("===rxjava26 课程名称：${it.name}")
+        }
+    }
+
+    /**
+     * merge (mergeArray与concatArray类似)
+     * 基本与concat一致，只不过merge是并行发送，因此不保证发送的observel的发射顺序
+     * （就目前我的自测来看，数据暂时是一致的）
+     */
+    fun rxJava27() {
+        Observable.merge(
+            Observable.just(1, 2, 3),
+            Observable.just(4, 5, 6),
+            Observable.just(7, 8, 9)
+        ).subscribe {
+            println("===rxJava27:$it")
+        }
+    }
+
+    /**
+     * ==============组合操作符 结束======================
+     */
     ///////////////////////////////////////////////////////////////////////
 }
