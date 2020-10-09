@@ -6,6 +6,7 @@ import android.util.Log
 import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeUnit
@@ -48,7 +49,9 @@ class MainActivity : AppCompatActivity() {
 //        rxJava23()
 //        rxJava25()
 //        rxJava26()
-        rxJava27()
+//        rxJava27()
+        rxJava28()
+//        rxJava29()
     }
 
     /**
@@ -522,6 +525,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * zip
+     * 将多个被观察者 按顺序组合起来，最终发送的事件数量与源Observable中最少事件的数量为准
+     * 可以看到，int集合长度4 String集合长度3，结果只打了3次
+     */
+    fun rxJava28() {
+        Observable.zip(
+            Observable.fromIterable(Util.getAllNumbersInt()),
+            Observable.fromIterable(Util.getAllNumberString()),
+             { t1, t2 -> t1.toString() + t2 }
+        ).subscribe {
+            println("====rxJava28:$it")
+        }
+    }
+
+    /**
+     * reduce
+     * reduce与scan类似
+     * scan:扫描一次发射一次 一共发射多次
+     * reduce:一次性全都处理完，再发射，仅仅发射一次
+     * 个人理解，这里的reduce是相对于scan的事件发射次数来命名的
+     */
+    fun rxJava29() {
+        Observable.just(1,2,3,4)
+            .reduce { t1, t2 -> t1 + t2 }
+            .subscribe {
+                println("===rxJava29 $it")
+            }
+    }
     /**
      * ==============组合操作符 结束======================
      */

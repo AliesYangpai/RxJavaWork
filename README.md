@@ -30,6 +30,8 @@ this is some simple of rxJava
               concat()
               concatArray()
               merge()
-              mergeArray()                              
+              mergeArray()    
+              zip()
+              reduce()                                              
 
 

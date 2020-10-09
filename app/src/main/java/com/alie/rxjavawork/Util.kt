@@ -64,4 +64,21 @@ object Util {
         list.add(course4)
         return list
     }
+
+    fun getAllNumbersInt():ArrayList<Int> {
+        val list = ArrayList<Int>()
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        list.add(4)
+        return list
+    }
+
+    fun getAllNumberString():ArrayList<String> {
+        val list = ArrayList<String>()
+        list.add("A")
+        list.add("B")
+        list.add("C")
+        return list
+    }
 }
