@@ -24,7 +24,14 @@ this is some simple of rxJava
               scan()                                              
 ## 功能操作符：
 ## 过滤操作符：
-              filter()  
+              filter()
+              ofType()
+              skip()
+              skipLast()
+              distinct()
+              distinctUntilChanged()
+              take()
+              takeLast()                        
 ## 条件操作符：  
 ## 组合操作符：
               concat()

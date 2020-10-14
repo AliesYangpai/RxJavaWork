@@ -50,8 +50,14 @@ class MainActivity : AppCompatActivity() {
 //        rxJava25()
 //        rxJava26()
 //        rxJava27()
-        rxJava28()
+//        rxJava28()
 //        rxJava29()
+//        rxJava40()
+//        rxJava41()
+//        rxJava42()
+//        rxJava43()
+//        rxJava44()
+        rxJava45()
     }
 
     /**
@@ -534,7 +540,7 @@ class MainActivity : AppCompatActivity() {
         Observable.zip(
             Observable.fromIterable(Util.getAllNumbersInt()),
             Observable.fromIterable(Util.getAllNumberString()),
-             { t1, t2 -> t1.toString() + t2 }
+            { t1, t2 -> t1.toString() + t2 }
         ).subscribe {
             println("====rxJava28:$it")
         }
@@ -548,7 +554,7 @@ class MainActivity : AppCompatActivity() {
      * 个人理解，这里的reduce是相对于scan的事件发射次数来命名的
      */
     fun rxJava29() {
-        Observable.just(1,2,3,4)
+        Observable.just(1, 2, 3, 4)
             .reduce { t1, t2 -> t1 + t2 }
             .subscribe {
                 println("===rxJava29 $it")
@@ -557,5 +563,103 @@ class MainActivity : AppCompatActivity() {
     /**
      * ==============组合操作符 结束======================
      */
+
+
     ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * ==============过滤操作符 开始======================
+     */
+    /**
+     * filter
+     * 打印出所有性别为女的学生 所修的课程的老师名称
+     *
+     */
+    fun rxJava40() {
+        Observable.fromIterable(Util.getAllStudents())
+            .filter { it.gender == "女" }
+            .concatMapIterable { it.courses }
+            .map { it.teacher }
+            .distinct() // 过滤重复事件
+            .subscribe {
+                println("===rxJava40 ${it?.name}")
+            }
+    }
+
+    /**
+     * ofType
+     * 这里的oftype是指不同的事件类型过滤，如果是一种事件，则效果很差~
+     */
+    fun rxJava41() {
+        Flowable.just("a", 1, 2, "b", "c")
+            .ofType(String::class.java)
+            .subscribe {
+                println("===rxjava41 $it")
+            }
+    }
+
+    /**
+     * skip
+     * skip(1) 指跳过前1个
+     * skip（2） 指跳过前2个
+     * skipLast(2) 指跳过后两个
+     */
+    fun rxJava42() {
+        Flowable.fromIterable(Util.getAllStudents())
+            .skip(1)
+            .skipLast(2)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                println("===rxjava42 ${it.gender}")
+            }
+    }
+
+    /**
+     * distinct：过滤掉重复事件
+     *
+     */
+    fun rxJava43() {
+        Flowable.fromIterable(Util.getAllStudents())
+            .filter { it.gender == "女" }
+            .concatMapIterable { it.courses }
+            .map { it.teacher }
+            .distinct { it.name } // 按照名称过滤
+            .subscribe {
+                println("===rxJava43 ${it?.name}")
+            }
+    }
+
+    /**
+     * distinctUntilChanged：过滤掉连续重复的元素
+     *
+     * 输入结果：
+     * "a","b","c","b","c","d"
+     */
+    fun rxJava44() {
+        Flowable.just("a", "a", "a", "b", "c", "b", "c", "c", "d", "d")
+            .distinctUntilChanged()
+            .subscribe {
+                println("===rxJava44 $it")
+            }
+    }
+
+    /**
+     * take:仅仅发射count个事件
+     */
+    fun rxJava45() {
+        Observable.fromIterable(Util.getAllStudents())
+            .concatMapIterable { it.courses }
+            .distinct { it.name }
+//            .take(4) // 这里只取前4个事件
+            .takeLast(4) // 这里只去后4个事件
+            .subscribe {
+                println("===rxJava45 ${it.name}")
+            }
+    }
+
+    /**
+     * ==============过滤操作符 结束======================
+     */
+
 }
