@@ -57,7 +57,10 @@ class MainActivity : AppCompatActivity() {
 //        rxJava42()
 //        rxJava43()
 //        rxJava44()
-        rxJava45()
+//        rxJava45()
+//        rxJava46()
+//        rxJava47()
+        rxJava48()
     }
 
     /**
@@ -662,4 +665,51 @@ class MainActivity : AppCompatActivity() {
      * ==============过滤操作符 结束======================
      */
 
+    ///////////////////////////////////////////////////////////////////////
+
+    /**
+     * ==============条件操作符 开始======================
+     */
+
+    /**
+     * all 当事件序列都满足某个条件时候，返回true否则返回false
+     * 判断所有课程的课时是否都是20
+     */
+    fun rxJava46() {
+        Observable.fromIterable(Util.getAllStudents())
+            .concatMapIterable { it.courses }
+            .all { it.time == 20 }
+            .subscribe { t1, t2 ->
+                println("====rxJava46 t1 $t1, t2$t2")
+            }
+    }
+
+    /**
+     * takewhile 从左往右，一组事件序列中，只要出现不满足条件条件的序列就终止事件发射
+     */
+    fun rxJava47() {
+        Observable.just(1, 2, 3, 4)
+            .takeWhile { it <= 3 }
+            .subscribe {
+                println("===rxJava47:it$it ")
+            }
+    }
+
+    /**
+     * skipWhile 一组事件序列中，
+     */
+    fun rxJava48() {
+        Observable.fromIterable(Util.getAllStudents())
+            .concatMapIterable { it.courses }
+            .map { it.teacher }
+            .distinct { it.name }
+            .skipWhile { it.age < 30 }
+            .subscribe {
+                println("===rxJava48 teacherName:${it?.name}")
+            }
+
+    }
+    /**
+     * ==============条件操作符 结束======================
+     */
 }

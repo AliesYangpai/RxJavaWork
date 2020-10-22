@@ -32,7 +32,10 @@ this is some simple of rxJava
               distinctUntilChanged()
               take()
               takeLast()                        
-## 条件操作符：  
+## 条件操作符：
+              all()
+              takeWhile()
+              skipWhile()          
 ## 组合操作符：
               concat()
               concatArray()
